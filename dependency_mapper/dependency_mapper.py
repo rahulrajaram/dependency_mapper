@@ -26,14 +26,15 @@ def header_dict(args_context):
         file_name, header_name = [component.strip().strip('"') for component in line.split(':#include')]
         if not file_name or not header_name:
             continue
-        if (
-            args_context.highlight
-            and not (
-                [f for f in args_context.highlight if file_name in f or f in file_name]
-                or [f for f in args_context.highlight if header_name in f or f in header_name]
-            )
-        ):
-            continue
+        if not args_context.show_all:
+            if (
+                args_context.highlight
+                and not (
+                    [f for f in args_context.highlight if file_name in f or f in file_name]
+                    or [f for f in args_context.highlight if header_name in f or f in header_name]
+                )
+            ):
+                continue
 
         if _header_dict.get(file_name):
             _header_dict[file_name].append(header_name)
@@ -67,6 +68,13 @@ def arguments_context():
         default=[],
         help='specify header file names to highlight',
         nargs='*'
+    )
+    parser.add_argument(
+        '-a',
+        '--show-all',
+        action='store_true',
+        default=False,
+        help='show all responses even if header file names are specified to be highlighted'
     )
 
     return parser.parse_args()
