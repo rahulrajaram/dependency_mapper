@@ -53,12 +53,9 @@ def header_list(args_context):
 
 def output(args_context):
     output = tabulate.tabulate(header_list(args_context), tablefmt='grid')
-
     for header in args_context.highlight:
         colored_version = termcolor.colored(header, 'red', attrs=['bold', 'underline'])
-        print(colored_version)
         output = output.replace(header, colored_version)
-
     print(output)
 
 
