@@ -45,7 +45,7 @@ def header_dict(args_context):
 def header_list(args_context):
     _file_to_headers_mappings_list = list()
     for key, value in six.iteritems(header_dict(args_context)):
-        _file_to_headers_mappings_list.append([key, '\n'.join(value)])
+        _file_to_headers_mappings_list.append([key, '\n'.join(sorted(value))])
     _file_to_headers_mappings_list.sort(key=lambda mapping: mapping[0])
 
     return _file_to_headers_mappings_list
