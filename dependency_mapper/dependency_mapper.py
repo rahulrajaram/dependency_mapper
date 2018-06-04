@@ -22,23 +22,8 @@ def header_dict(args_context):
     _header_dict = dict()
     for line in grep(args_context.path):
         file_name, header_name = [component.strip().strip('"') for component in line.split(':#include')]
-        if not file_name or not header_name:
-            continue
-
-        if (
-            not args_context.show_all
-            and args_context.highlight
-            and not (
-                [f for f in args_context.highlight if file_name in f or f in file_name]
-                or [f for f in args_context.highlight if header_name in f or f in header_name]
-            )
-        ):
-            continue
-
-        if _header_dict.get(file_name):
-            _header_dict[file_name].append(header_name)
-        else:
-            _header_dict[file_name] = [header_name]
+        if file_name and header_name:
+            _header_dict.setdefault(file_name, []).append(header_name)
     return _header_dict
 
 

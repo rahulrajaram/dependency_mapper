@@ -24,13 +24,6 @@ def create():
         nargs='*'
     )
     parser.add_argument(
-        '-a',
-        '--show-all',
-        action='store_true',
-        default=False,
-        help='show all results even if header file names are specified to be highlighted thorugh --highlight'
-    )
-    parser.add_argument(
         '-p',
         '--path',
         help='directory in which the source files whose dependencies to map are located; defaults to the present working directory'
