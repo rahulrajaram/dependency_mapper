@@ -10,7 +10,7 @@ from dependency_mapper import arguments_context
 
 def grep(cwd='.'):
     (stdout, stderr) = subprocess.Popen(
-        ['grep', '-or', "^#include \".*\"", '--exclude-dir=.git', '{}'.format(cwd)],
+        ['grep', '-orI', "^#include \".*\"", '--exclude-dir=.git', '{}'.format(cwd)],
         stdout=subprocess.PIPE
     ).communicate()
 
