@@ -21,9 +21,21 @@ def grep(cwd='.'):
 def header_dict(args_context):
     _header_dict = dict()
     for line in grep(args_context.path):
-        file_name, header_name = [component.strip().strip('"') for component in line.split(':#include')]
-        if file_name and header_name:
-            _header_dict.setdefault(file_name, []).append(header_name)
+        file_name, header_name = [component.strip().strip('"') for component in line.split(':#include') if line.strip()]
+        if not file_name or not header_name:
+            continue
+
+        def matched(name):
+            return [f for f in args_context.highlight if name in f or f in name]
+
+        if (
+            args_context.curtail
+            and not matched(file_name)
+            and not matched(header_name)
+        ):
+            continue
+
+        _header_dict.setdefault(file_name, []).append(header_name)
     return _header_dict
 
 
