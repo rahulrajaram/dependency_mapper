@@ -8,11 +8,11 @@ class FormatterClass(argparse.RawDescriptionHelpFormatter):
 
 def create():
     parser = argparse.ArgumentParser(
-    description="""Simple tool to draw the header-file dependency map of your C/C++ project.',
+    description="""Simple tool to draw the header-file dependency map of your C/C++ project.
 
     Usage:
         cd <path/to/project/source>
-        describe_headers
+        describe_headers [optional arguments]
 """,
         formatter_class=FormatterClass
     )
@@ -29,6 +29,11 @@ def create():
         action='store_true',
         default=False,
         help='show all results even if header file names are specified to be highlighted thorugh --highlight'
+    )
+    parser.add_argument(
+        '-p',
+        '--path',
+        help='directory in which the source files whose dependencies to map are located; defaults to the present working directory'
     )
 
     return parser.parse_args()

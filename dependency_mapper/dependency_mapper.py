@@ -8,9 +8,9 @@ import termcolor
 from dependency_mapper import arguments_context
 
 
-def grep_output():
+def grep(cwd='.'):
     (stdout, stderr) = subprocess.Popen(
-        ['grep', '-or', "^#include \".*\"", '--exclude-dir=.git'],
+        ['grep', '-or', "^#include \".*\"", '--exclude-dir=.git', '{}'.format(cwd)],
         stdout=subprocess.PIPE
     ).communicate()
 
@@ -20,7 +20,7 @@ def grep_output():
 
 def header_dict(args_context):
     _header_dict = dict()
-    for line in grep_output():
+    for line in grep(args_context.path):
         file_name, header_name = [component.strip().strip('"') for component in line.split(':#include')]
         if not file_name or not header_name:
             continue
