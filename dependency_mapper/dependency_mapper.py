@@ -9,7 +9,10 @@ from dependency_mapper import arguments_context
 
 
 def grep_output():
-    (stdout, stderr) = subprocess.Popen(['grep', '-r', "^#include \"*\""], stdout=subprocess.PIPE).communicate()
+    (stdout, stderr) = subprocess.Popen(
+        ['grep', '-or', "^#include \".*\"", '--exclude-dir=.git'],
+        stdout=subprocess.PIPE
+    ).communicate()
 
     string_output = stdout if sys.version_info < (3, 0) else stdout.decode()
     return string_output.strip().split('\n')
