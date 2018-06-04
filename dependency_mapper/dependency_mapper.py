@@ -8,7 +8,7 @@ import termcolor
 from dependency_mapper import arguments_context
 
 
-def grep(cwd='.'):
+def grep(cwd):
     (stdout, stderr) = subprocess.Popen(
         ['grep', '-orI', "^#include \".*\"", '--exclude-dir=.git', '{}'.format(cwd)],
         stdout=subprocess.PIPE
