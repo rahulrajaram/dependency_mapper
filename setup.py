@@ -10,7 +10,8 @@ setuptools.setup(
     },
     install_requires=[
         'six',
-        'tabulate'
+        'tabulate',
+        'termcolor'
     ],
     license='MIT',
     name='dependency_mapper',
