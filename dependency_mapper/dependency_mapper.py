@@ -8,12 +8,18 @@ import termcolor
 from dependency_mapper import arguments_context
 
 
-def grep(cwd, parse_system_headers=False):
-    directive_patterns = ['#include ".*"']
+def grep(search_candidates, parse_system_headers=False):
+    directive_patterns = ['^#include ".*"']
     if parse_system_headers:
-        directive_patterns.append("#include <.*>")
+        directive_patterns.append("^#include <.*>")
 
-    grep_args = ['grep', '-EorI', '|'.join(directive_patterns), '--exclude-dir=.git', '{}'.format(cwd)]
+    grep_args = [
+        'grep',
+        "-EorI",
+        "{}".format('|'.join(directive_patterns)),
+        '--exclude-dir=.git',
+    ] + search_candidates
+
     (stdout, stderr) = subprocess.Popen(grep_args, stdout=subprocess.PIPE).communicate()
 
     string_output = stdout if sys.version_info < (3, 0) else stdout.decode()
@@ -22,7 +28,7 @@ def grep(cwd, parse_system_headers=False):
 
 def header_dict(args_context):
     _header_dict = dict()
-    for line in grep(args_context.path, args_context.parse_system_headers):
+    for line in grep(args_context.paths, args_context.parse_system_headers):
         if not line.strip():
             continue
         file_name, header_name = [

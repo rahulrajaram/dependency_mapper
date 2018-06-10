@@ -39,9 +39,10 @@ def create():
     )
     parser.add_argument(
         '-p',
-        '--path',
-        default='.',
-        help='directory in which the source files whose dependencies to map are located; defaults to the present working directory'
+        '--paths',
+        default=['.'],
+        nargs='*',
+        help='files/directories in which the source files whose dependencies to map are located; defaults to a set comprising of only the present working directory'
     )
     parser.add_argument(
         '-c',
