@@ -36,5 +36,12 @@ def create():
         default=False,
         help='optionally curtail output if requested to highlight certain text using --highlight; defaults to false'
     )
+    parser.add_argument(
+        '-s',
+        '--parse-system-headers',
+        action='store_true',
+        default=False,
+        help='use system-headers delimiters, "<...>", to parse header files; defaults to false'
+    )
 
     return parser.parse_args()

@@ -8,11 +8,13 @@ import termcolor
 from dependency_mapper import arguments_context
 
 
-def grep(cwd):
-    (stdout, stderr) = subprocess.Popen(
-        ['grep', '-orI', "^#include \".*\"", '--exclude-dir=.git', '{}'.format(cwd)],
-        stdout=subprocess.PIPE
-    ).communicate()
+def grep(cwd, parse_system_headers=False):
+    directive_patterns = ['#include ".*"']
+    if parse_system_headers:
+        directive_patterns.append("#include <.*>")
+
+    grep_args = ['grep', '-EorI', '|'.join(directive_patterns), '--exclude-dir=.git', '{}'.format(cwd)]
+    (stdout, stderr) = subprocess.Popen(grep_args, stdout=subprocess.PIPE).communicate()
 
     string_output = stdout if sys.version_info < (3, 0) else stdout.decode()
     return string_output.strip().split('\n')
@@ -20,8 +22,13 @@ def grep(cwd):
 
 def header_dict(args_context):
     _header_dict = dict()
-    for line in grep(args_context.path):
-        file_name, header_name = [component.strip().strip('"') for component in line.split(':#include') if line.strip()]
+    for line in grep(args_context.path, args_context.parse_system_headers):
+        if not line.strip():
+            continue
+        file_name, header_name = [
+            component.strip().strip('"').strip('<').strip('>') for component in line.split(':#include')
+        ]
+
         if not file_name or not header_name:
             continue
 
