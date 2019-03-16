@@ -1,4 +1,4 @@
-lannguage: python
+language: python
 services:
   - docker
 matrix:
